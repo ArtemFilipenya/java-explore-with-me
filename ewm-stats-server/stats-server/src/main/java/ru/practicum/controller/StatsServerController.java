@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +17,7 @@ import ru.practicum.dto.EndpointHitDto;
 import ru.practicum.dto.ViewStatsDto;
 import ru.practicum.service.StatsService;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -43,7 +45,8 @@ public class StatsServerController {
     }
 
     @GetMapping(STATS_ENDPOINT)
-    public List<ViewStatsDto> getStats(@RequestParam(name = "start", required = false)
+    public ResponseEntity<List<ViewStatsDto>> getStats(HttpServletRequest request,
+                                       @RequestParam(name = "start", required = false)
                                        @DateTimeFormat(pattern = YYYY_MM_DD_HH_MM_SS)
                                        LocalDateTime start,
                                        @RequestParam(name = "end", required = false)
@@ -52,12 +55,17 @@ public class StatsServerController {
                                        @RequestParam(name = "uris", required = false) String[] uris,
                                        @RequestParam(name = "unique", defaultValue = "false") boolean unique
     ) {
+        if (start == null && request.getParameter("start") == null) {
+            return ResponseEntity.notFound().build();
+        }
+
         final String pathStr = getPathStr(start, end, uris, unique);
         log.debug("Request received GET '{}?{}'", STATS_ENDPOINT, pathStr);
-
-        return statsService.getStats(start, end, uris, unique)
+        List<ViewStatsDto> stats = statsService.getStats(start, end, uris, unique)
                 .stream().sorted()
                 .collect(Collectors.toList());
+
+        return ResponseEntity.ok(stats);
     }
 
     private String getPathStr(LocalDateTime start, LocalDateTime end, String[] uris, boolean unique) {

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import ru.practicum.dto.EndpointHitDto;
 import ru.practicum.dto.ViewStatsDto;
+import ru.practicum.exeption.MissingParameterException;
 import ru.practicum.service.StatsService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -45,8 +46,7 @@ public class StatsServerController {
     }
 
     @GetMapping(STATS_ENDPOINT)
-    public ResponseEntity<List<ViewStatsDto>> getStats(HttpServletRequest request,
-                                       @RequestParam(name = "start", required = false)
+    public List<ViewStatsDto> getStats(@RequestParam(name = "start", required = false)
                                        @DateTimeFormat(pattern = YYYY_MM_DD_HH_MM_SS)
                                        LocalDateTime start,
                                        @RequestParam(name = "end", required = false)
@@ -55,17 +55,16 @@ public class StatsServerController {
                                        @RequestParam(name = "uris", required = false) String[] uris,
                                        @RequestParam(name = "unique", defaultValue = "false") boolean unique
     ) {
-        if (start == null && request.getParameter("start") == null) {
-            return ResponseEntity.notFound().build();
+        if (start == null || end == null) {
+            throw new MissingParameterException("start or end");
         }
 
         final String pathStr = getPathStr(start, end, uris, unique);
         log.debug("Request received GET '{}?{}'", STATS_ENDPOINT, pathStr);
-        List<ViewStatsDto> stats = statsService.getStats(start, end, uris, unique)
+
+        return statsService.getStats(start, end, uris, unique)
                 .stream().sorted()
                 .collect(Collectors.toList());
-
-        return ResponseEntity.ok(stats);
     }
 
     private String getPathStr(LocalDateTime start, LocalDateTime end, String[] uris, boolean unique) {

@@ -58,7 +58,6 @@ public class StatsServerController {
         if (start == null || end == null) {
             throw new MissingParameterException("start or end");
         }
-
         final String pathStr = getPathStr(start, end, uris, unique);
         log.debug("Request received GET '{}?{}'", STATS_ENDPOINT, pathStr);
 

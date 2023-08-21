@@ -25,31 +25,21 @@ import ru.practicum.service.stats.StatsService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyBoolean;
-import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 import static ru.practicum.utils.Constants.EVENT_WITH_ID_D_WAS_NOT_FOUND;
-import static ru.practicum.utils.TestInitDataUtil.getCategoryList;
-import static ru.practicum.utils.TestInitDataUtil.getEventList;
-import static ru.practicum.utils.TestInitDataUtil.getUserList;
+import static ru.practicum.utils.TestInitDataUtil.*;
 
 @ExtendWith(MockitoExtension.class)
 class PublicEventServiceImplTest {
+    private final long eventId = 1L;
+    private final int from = 0;
+    private final int size = 10;
     @Mock
     private EventRepository repository;
     @Mock
@@ -58,11 +48,6 @@ class PublicEventServiceImplTest {
     private HttpServletRequest httpServletRequest;
     @InjectMocks
     private EventServiceImpl service;
-
-    private final long eventId = 1L;
-    private final int from = 0;
-    private final int size = 10;
-
     private List<Event> eventList;
     private List<Long> catIdList;
 

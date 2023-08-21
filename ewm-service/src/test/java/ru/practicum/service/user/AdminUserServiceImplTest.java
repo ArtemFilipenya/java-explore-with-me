@@ -29,14 +29,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class AdminUserServiceImplTest {
+    private final int from = 0;
+    private final int size = 10;
     @Mock
     private UserRepository repository;
     @Mock
@@ -48,8 +46,6 @@ class AdminUserServiceImplTest {
     private List<User> userList;
     private List<Long> ids;
     private List<UserDto> userDtoList;
-    private final int from = 0;
-    private final int size = 10;
 
     @BeforeEach
     void setUp() {

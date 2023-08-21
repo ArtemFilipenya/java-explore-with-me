@@ -16,26 +16,21 @@ import ru.practicum.mapper.EventMapper;
 import ru.practicum.service.event.EventService;
 
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.practicum.utils.TestInitDataUtil.getCategoryList;
-import static ru.practicum.utils.TestInitDataUtil.getEventList;
-import static ru.practicum.utils.TestInitDataUtil.getUserList;
+import static ru.practicum.utils.TestInitDataUtil.*;
 
 @WebMvcTest(controllers = AdminEventController.class)
 class AdminEventControllerTest {
+    UpdateEventAdminRequest updateDto;
     @MockBean
     private EventService eventService;
     @Autowired
@@ -46,7 +41,6 @@ class AdminEventControllerTest {
     private List<EventFullDto> eventFullDtoList;
     private CategoryDto categoryDto;
     private EventFullDto eventFullDto;
-    UpdateEventAdminRequest updateDto;
 
     @BeforeEach
     void setUp() {

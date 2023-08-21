@@ -14,12 +14,8 @@ import ru.practicum.model.User;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static ru.practicum.utils.TestInitDataUtil.getCategoryList;
-import static ru.practicum.utils.TestInitDataUtil.getEventList;
-import static ru.practicum.utils.TestInitDataUtil.getUserList;
+import static org.junit.jupiter.api.Assertions.*;
+import static ru.practicum.utils.TestInitDataUtil.*;
 
 @DataJpaTest
 class EventRepositoryTest {

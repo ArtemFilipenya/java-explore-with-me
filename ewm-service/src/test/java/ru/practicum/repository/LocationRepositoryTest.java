@@ -12,10 +12,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DataJpaTest
 class LocationRepositoryTest {
-    @Autowired
-    private LocationRepository repository;
     private final float lat = 36.5F;
     private final float lon = 15.586F;
+    @Autowired
+    private LocationRepository repository;
     private Location location;
 
     @BeforeEach

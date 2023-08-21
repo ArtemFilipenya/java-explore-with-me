@@ -16,21 +16,18 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyFloat;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class LocationServiceTest {
+    private final float lat = 37.62f;
+    private final float lon = 55.754167f;
     @Mock
     private LocationRepository repository;
     @InjectMocks
     private LocationServiceImpl locationService;
     private LocationDto locationDto;
     private Location expectedLocation;
-    private final float lat = 37.62f;
-    private final float lon = 55.754167f;
 
     @BeforeEach
     void setUp() {

@@ -6,16 +6,8 @@ import ru.practicum.dto.event.NewEventDto;
 import ru.practicum.dto.location.LocationDto;
 import ru.practicum.enums.EventState;
 import ru.practicum.enums.RequestStatus;
-import ru.practicum.model.Category;
-import ru.practicum.model.Event;
-import ru.practicum.model.Location;
-import ru.practicum.model.Request;
-import ru.practicum.model.User;
-import ru.practicum.repository.CategoryRepository;
-import ru.practicum.repository.EventRepository;
-import ru.practicum.repository.LocationRepository;
-import ru.practicum.repository.RequestRepository;
-import ru.practicum.repository.UserRepository;
+import ru.practicum.model.*;
+import ru.practicum.repository.*;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -66,7 +58,7 @@ public class TestInitDataUtil {
     }
 
     private static Event addEvent(EventRepository repository, LocationRepository locationRepository,
-                                  String title, String description,String annotation,
+                                  String title, String description, String annotation,
                                   Category category, User user) {
         Random r = new Random();
         final Location l = Location.builder().lat(r.nextFloat() * 10).lon(r.nextFloat() * 10).build();

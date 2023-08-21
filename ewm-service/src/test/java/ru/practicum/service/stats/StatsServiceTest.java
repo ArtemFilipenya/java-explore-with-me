@@ -25,14 +25,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
-import static org.mockito.Mockito.atLeast;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 class StatsServiceTest {
+    private final String ip = "localhost:8080";
+    private final String uri = "/events/1";
     @Mock
     private StatsClient statsClient;
     @Mock
@@ -41,8 +40,6 @@ class StatsServiceTest {
     private StatsServiceImpl service;
     private ViewStatsDto viewStatsDto1;
     private ViewStatsDto viewStatsDto2;
-    private final String ip = "localhost:8080";
-    private final String uri = "/events/1";
 
     @BeforeEach
     void setUp() {

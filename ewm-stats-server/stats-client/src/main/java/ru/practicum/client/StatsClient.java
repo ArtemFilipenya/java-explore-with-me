@@ -14,9 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static ru.practicum.Constants.FORMATTER;
-import static ru.practicum.Constants.HIT_ENDPOINT;
-import static ru.practicum.Constants.STATS_ENDPOINT;
+import static ru.practicum.Constants.*;
 
 @Service
 @Slf4j

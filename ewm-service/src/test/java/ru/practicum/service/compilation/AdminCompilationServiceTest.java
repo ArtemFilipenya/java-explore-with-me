@@ -34,22 +34,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class AdminCompilationServiceTest {
+    private final Long compId = 1L;
     @Mock
     private CompilationRepository repository;
     @Mock
     private EventService eventService;
     @InjectMocks
     private CompilationServiceImpl compilationService;
-
-    private final Long compId = 1L;
     private NewCompilationDto body;
     private NewCompilationDto body2;
     private CompilationDto compilationDto;

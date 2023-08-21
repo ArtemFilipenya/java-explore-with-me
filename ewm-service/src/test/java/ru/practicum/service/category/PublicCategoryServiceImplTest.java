@@ -28,13 +28,13 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class PublicCategoryServiceImplTest {
+    final long catId = 1L;
     @Mock
     private CategoryRepository repository;
     @InjectMocks
     private CategoryServiceImpl categoryService;
     private List<Category> categoryList;
     private List<CategoryDto> categoryDtoList;
-    final long catId = 1L;
 
     @BeforeEach
     void setUp() {

@@ -21,18 +21,13 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 import static ru.practicum.utils.Constants.CATEGORY_WITH_ID_D_WAS_NOT_FOUND;
 
 @ExtendWith(MockitoExtension.class)
 class AdminCategoryServiceImplTest {
+    private final long catId = 1L;
     @Mock
     private CategoryRepository repository;
     @Mock
@@ -42,7 +37,6 @@ class AdminCategoryServiceImplTest {
     private NewCategoryDto body;
     private CategoryDto dto;
     private Category category;
-    private final long catId = 1L;
     private CategoryDto newCategoryDto;
     private Category newCategory;
 

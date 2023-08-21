@@ -20,9 +20,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static ru.practicum.utils.Constants.EVENT_WITH_ID_D_WAS_NOT_FOUND;
 import static ru.practicum.utils.Constants.THE_REQUIRED_OBJECT_WAS_NOT_FOUND;
-import static ru.practicum.utils.TestInitDataUtil.getCategoryList;
-import static ru.practicum.utils.TestInitDataUtil.getEventList;
-import static ru.practicum.utils.TestInitDataUtil.getUserList;
+import static ru.practicum.utils.TestInitDataUtil.*;
 
 @ExtendWith(MockitoExtension.class)
 class EventServiceTest {

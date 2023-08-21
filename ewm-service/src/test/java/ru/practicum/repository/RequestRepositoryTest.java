@@ -6,18 +6,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import ru.practicum.enums.RequestStatus;
 import ru.practicum.model.Category;
-import ru.practicum.utils.TestInitDataUtil;
 import ru.practicum.model.Event;
 import ru.practicum.model.Request;
 import ru.practicum.model.User;
+import ru.practicum.utils.TestInitDataUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 class RequestRepositoryTest {

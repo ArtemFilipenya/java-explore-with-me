@@ -5,8 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.PageRequest;
-import ru.practicum.utils.TestInitDataUtil;
 import ru.practicum.model.User;
+import ru.practicum.utils.TestInitDataUtil;
 
 import java.util.ArrayList;
 import java.util.List;

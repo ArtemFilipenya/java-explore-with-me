@@ -1,4 +1,3 @@
-
 package ru.practicum.dto.user;
 
 import lombok.AllArgsConstructor;

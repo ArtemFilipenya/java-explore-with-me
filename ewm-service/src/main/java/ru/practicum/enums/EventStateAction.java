@@ -2,7 +2,6 @@ package ru.practicum.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.Getter;
-
 import ru.practicum.mapper.EnumMapper;
 
 @Getter

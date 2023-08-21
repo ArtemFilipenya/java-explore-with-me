@@ -14,9 +14,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static ru.practicum.utils.TestInitDataUtil.getCategoryList;
-import static ru.practicum.utils.TestInitDataUtil.getEventList;
-import static ru.practicum.utils.TestInitDataUtil.getUserList;
+import static ru.practicum.utils.TestInitDataUtil.*;
 
 @DataJpaTest
 class CompilationRepositoryTest {

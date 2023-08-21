@@ -48,6 +48,39 @@ public class EventServiceImpl implements EventService {
     private final LocationService locationService;
     private final StatsService statsService;
 
+    /**
+     * Получить просмотры события
+     */
+    private static long getView(HttpServletRequest request, Map<String, Long> viewStats, Long eventId) {
+        final String uri = request.getRequestURI() + "/" + eventId;
+        return viewStats.getOrDefault(uri, 0L);
+    }
+
+    private static void updateData(Event event, String annotation,
+                                   String title, String description,
+                                   Integer participantLimit,
+                                   Boolean paid,
+                                   Boolean requestModeration) {
+        if (annotation != null) {
+            event.setAnnotation(annotation);
+        }
+        if (title != null) {
+            event.setTitle(title);
+        }
+        if (description != null) {
+            event.setDescription(description);
+        }
+        if (participantLimit != null) {
+            event.setParticipantLimit(participantLimit);
+        }
+        if (paid != null) {
+            event.setPaid(paid);
+        }
+        if (requestModeration != null) {
+            event.setRequestModeration(requestModeration);
+        }
+    }
+
     @Override
     @Transactional
     public EventFullDto saveEvent(long userId, NewEventDto body) {
@@ -107,7 +140,6 @@ public class EventServiceImpl implements EventService {
                 .map(EventMapper::toFullDto)
                 .collect(Collectors.toList());
     }
-
 
     /**
      * Получение подробной информации об опубликованном событии по его идентификатору<br>
@@ -300,14 +332,6 @@ public class EventServiceImpl implements EventService {
     }
 
     /**
-     * Получить просмотры события
-     */
-    private static long getView(HttpServletRequest request, Map<String, Long> viewStats, Long eventId) {
-        final String uri = request.getRequestURI() + "/" + eventId;
-        return viewStats.getOrDefault(uri, 0L);
-    }
-
-    /**
      * Получить событие пользователя
      */
     private Event getEventForUser(long userId, long eventId) {
@@ -315,31 +339,6 @@ public class EventServiceImpl implements EventService {
                 .orElseThrow(() -> new NotFoundException(
                         String.format(EVENT_WITH_ID_D_WAS_NOT_FOUND, eventId),
                         THE_REQUIRED_OBJECT_WAS_NOT_FOUND));
-    }
-
-    private static void updateData(Event event, String annotation,
-                                   String title, String description,
-                                   Integer participantLimit,
-                                   Boolean paid,
-                                   Boolean requestModeration) {
-        if (annotation != null) {
-            event.setAnnotation(annotation);
-        }
-        if (title != null) {
-            event.setTitle(title);
-        }
-        if (description != null) {
-            event.setDescription(description);
-        }
-        if (participantLimit != null) {
-            event.setParticipantLimit(participantLimit);
-        }
-        if (paid != null) {
-            event.setPaid(paid);
-        }
-        if (requestModeration != null) {
-            event.setRequestModeration(requestModeration);
-        }
     }
 
     /**

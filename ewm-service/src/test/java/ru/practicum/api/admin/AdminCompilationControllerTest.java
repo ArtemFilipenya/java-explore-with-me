@@ -30,13 +30,12 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.practicum.utils.TestInitDataUtil.getCategoryList;
-import static ru.practicum.utils.TestInitDataUtil.getEventList;
-import static ru.practicum.utils.TestInitDataUtil.getUserList;
+import static ru.practicum.utils.TestInitDataUtil.*;
 
 @WebMvcTest(controllers = AdminCompilationController.class)
 class AdminCompilationControllerTest {
 
+    NewCompilationDto newCompilationDto;
     @MockBean
     private CompilationService service;
     @Autowired
@@ -47,7 +46,6 @@ class AdminCompilationControllerTest {
     private List<EventFullDto> eventFullDtoList;
     private CategoryDto categoryDto;
     private CompilationDto dto;
-    NewCompilationDto newCompilationDto;
 
     @BeforeEach
     void setUp() {

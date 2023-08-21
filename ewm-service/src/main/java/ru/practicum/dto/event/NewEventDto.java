@@ -7,11 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.dto.location.LocationDto;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.PositiveOrZero;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.time.LocalDateTime;
 
 import static ru.practicum.Constants.YYYY_MM_DD_HH_MM_SS;

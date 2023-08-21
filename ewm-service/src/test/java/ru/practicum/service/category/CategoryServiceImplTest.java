@@ -15,17 +15,15 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class CategoryServiceImplTest {
+    private final long catId = 1L;
     @Mock
     private CategoryRepository repository;
     @InjectMocks
     private CategoryServiceImpl categoryService;
-    private final long catId = 1L;
 
     @Test
     void findCategoryById() {

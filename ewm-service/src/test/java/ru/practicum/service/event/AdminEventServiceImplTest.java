@@ -1,6 +1,5 @@
 package ru.practicum.service.event;
 
-import com.querydsl.core.types.Predicate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -9,8 +8,6 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import ru.practicum.dto.event.EventFullDto;
 import ru.practicum.dto.event.NewEventDto;
 import ru.practicum.dto.event.UpdateEventAdminRequest;
@@ -37,32 +34,24 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static ru.practicum.Constants.FORMATTER;
 import static ru.practicum.enums.EventState.CANCELED;
 import static ru.practicum.enums.EventState.PUBLISHED;
-import static ru.practicum.utils.Constants.CATEGORY_WITH_ID_D_WAS_NOT_FOUND;
-import static ru.practicum.utils.Constants.EVENT_WITH_ID_D_WAS_NOT_FOUND;
-import static ru.practicum.utils.Constants.IMPOSSIBLE_S_WHEN_EVENT_STATUS_ONE_OF_S_CURRENT_STATUS_S;
-import static ru.practicum.utils.TestInitDataUtil.getCategoryList;
-import static ru.practicum.utils.TestInitDataUtil.getEventList;
-import static ru.practicum.utils.TestInitDataUtil.getUserList;
-import static ru.practicum.utils.TestInitDataUtil.makeCategory;
-import static ru.practicum.utils.TestInitDataUtil.makeNewEventWithCorrectData;
-import static ru.practicum.utils.TestInitDataUtil.makeUser;
+import static ru.practicum.utils.Constants.*;
+import static ru.practicum.utils.TestInitDataUtil.*;
 
 @ExtendWith(MockitoExtension.class)
 class AdminEventServiceImplTest {
+    private final long eventId = 1L;
+    private final int from = 0;
+    private final int size = 10;
+    private final List<EventState> eventStateSet = Set.of(CANCELED, PUBLISHED).stream()
+            .sorted()
+            .collect(Collectors.toList());
     @Mock
     private EventRepository repository;
     @Mock
@@ -71,20 +60,12 @@ class AdminEventServiceImplTest {
     private LocationService locationService;
     @InjectMocks
     private EventServiceImpl adminService;
-
-    private final long eventId = 1L;
-    private final int from = 0;
-    private final int size = 10;
-
     private List<Event> eventList;
     private List<EventFullDto> eventFullDtos;
     private List<Long> catIdList;
     private List<Long> userIdList;
     private Event eventPending;
     private Event eventPublished;
-    private final List<EventState> eventStateSet = Set.of(CANCELED, PUBLISHED).stream()
-            .sorted()
-            .collect(Collectors.toList());
 
     @BeforeEach
     void setUp() {

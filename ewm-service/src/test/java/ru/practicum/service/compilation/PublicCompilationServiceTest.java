@@ -24,24 +24,22 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyBoolean;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class PublicCompilationServiceTest {
+    private final long compId = 1L;
+    private final int from = 0;
+    private final int size = 10;
     @Mock
     private CompilationRepository repository;
     @InjectMocks
     private CompilationServiceImpl service;
-    private final long compId = 1L;
     private List<Event> eventList;
     private List<Long> eventIds;
     private NewCompilationDto body;
     private Compilation compilation;
-    private final int from = 0;
-    private final int size = 10;
 
     @BeforeEach
     void setUp() {

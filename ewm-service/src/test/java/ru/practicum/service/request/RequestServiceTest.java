@@ -31,16 +31,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static ru.practicum.enums.RequestStatus.CANCELED;
-import static ru.practicum.enums.RequestStatus.CONFIRMED;
-import static ru.practicum.enums.RequestStatus.PENDING;
-import static ru.practicum.enums.RequestStatus.REJECTED;
+import static org.mockito.Mockito.*;
+import static ru.practicum.enums.RequestStatus.*;
 import static ru.practicum.utils.Constants.EVENT_WITH_ID_D_WAS_NOT_FOUND;
 import static ru.practicum.utils.Constants.USER_WITH_ID_D_WAS_NOT_FOUND;
 import static ru.practicum.utils.TestInitDataUtil.getEventList;
@@ -48,6 +40,8 @@ import static ru.practicum.utils.TestInitDataUtil.getUserList;
 
 @ExtendWith(MockitoExtension.class)
 class RequestServiceTest {
+    private final long eventId = 1L;
+    private final long userId2 = 2L;
     @Mock
     private RequestRepository repository;
     @Mock
@@ -58,8 +52,6 @@ class RequestServiceTest {
     private EventService eventService;
     @InjectMocks
     private RequestServiceImpl service;
-    private final long eventId = 1L;
-    private final long userId2 = 2L;
     private Request request;
     private User user;
     private Event event;

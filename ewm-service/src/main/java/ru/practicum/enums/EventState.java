@@ -1,7 +1,6 @@
 package ru.practicum.enums;
 
 import lombok.Getter;
-
 import ru.practicum.mapper.EnumMapper;
 
 @Getter

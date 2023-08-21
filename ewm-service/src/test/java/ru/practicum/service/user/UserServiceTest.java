@@ -7,8 +7,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.practicum.exception.NotFoundException;
-import ru.practicum.repository.UserRepository;
 import ru.practicum.model.User;
+import ru.practicum.repository.UserRepository;
 import ru.practicum.utils.Constants;
 
 import java.util.Optional;
@@ -16,17 +16,15 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
+    private final long userId = 1L;
     @Mock
     private UserRepository userRepository;
     @InjectMocks
     private UserServiceImpl userUtilService;
-    private final long userId = 1L;
     private User expectedUser;
     private String expectedErrMessage;
 

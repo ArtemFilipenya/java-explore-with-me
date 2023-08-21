@@ -29,8 +29,6 @@ import java.util.stream.Collectors;
 
 import static java.lang.Boolean.FALSE;
 import static ru.practicum.enums.RequestStatus.*;
-import static ru.practicum.enums.RequestStatus.CONFIRMED;
-import static ru.practicum.enums.RequestStatus.REJECTED;
 
 @Service
 @RequiredArgsConstructor
@@ -41,6 +39,14 @@ public class RequestServiceImpl implements RequestService {
 
     private final UserService userService;
     private final EventService eventService;
+
+    private static boolean isConfirmedRequest(Request r) {
+        return CONFIRMED.equals(r.getStatus());
+    }
+
+    private static boolean isRejectedRequest(Request r) {
+        return REJECTED.equals(r.getStatus());
+    }
 
     /**
      * - нельзя добавить повторный запрос (Ожидается код ошибки 409)<p>
@@ -135,8 +141,9 @@ public class RequestServiceImpl implements RequestService {
 
     /**
      * Изменение статуса (подтверждена, отменена) заявок на участие в событии текущего пользователя
-     * @param body Новый статус для заявок на участие в событии текущего пользователя
-     * @param userId id текущего пользователя
+     *
+     * @param body    Новый статус для заявок на участие в событии текущего пользователя
+     * @param userId  id текущего пользователя
      * @param eventId id события текущего пользователя
      * @return - нельзя подтвердить заявку, если уже достигнут лимит по заявкам на данное событие (Ожидается код ошибки 409)<p></p>
      * - статус можно изменить только у заявок, находящихся в состоянии ожидания (Ожидается код ошибки 409)<p></p>
@@ -229,15 +236,6 @@ public class RequestServiceImpl implements RequestService {
             throw new ConflictException(String.format("Wrong status. Status should be one of: %s",
                     availableStats.stream().sorted().collect(Collectors.toList())));
         }
-    }
-
-
-    private static boolean isConfirmedRequest(Request r) {
-        return CONFIRMED.equals(r.getStatus());
-    }
-
-    private static boolean isRejectedRequest(Request r) {
-        return REJECTED.equals(r.getStatus());
     }
 
 }

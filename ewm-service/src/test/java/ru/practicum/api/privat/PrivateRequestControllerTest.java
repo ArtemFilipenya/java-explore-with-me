@@ -21,23 +21,21 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.practicum.Constants.FORMATTER;
 
 @WebMvcTest(controllers = PrivateRequestController.class)
 class PrivateRequestControllerTest {
+    private final long userId = 2L;
+    private final long eventId = 1L;
+    private final Long requestId = 1L;
     @MockBean
     private RequestService service;
     @Autowired
     private ObjectMapper mapper;
     @Autowired
     private MockMvc mvc;
-    private final long userId = 2L;
-    private final long eventId = 1L;
-    private final Long requestId = 1L;
     private ParticipationRequestDto requestDto1;
     private ParticipationRequestDto requestDto2;
     private EventRequestStatusUpdateResult updatedRequest;

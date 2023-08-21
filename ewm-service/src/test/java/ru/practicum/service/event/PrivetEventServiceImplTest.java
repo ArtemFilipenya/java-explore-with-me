@@ -39,24 +39,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static ru.practicum.Constants.FORMATTER;
 import static ru.practicum.utils.Constants.CATEGORY_WITH_ID_D_WAS_NOT_FOUND;
 import static ru.practicum.utils.Constants.USER_WITH_ID_D_WAS_NOT_FOUND;
-import static ru.practicum.utils.TestInitDataUtil.getCategoryList;
-import static ru.practicum.utils.TestInitDataUtil.getEventList;
-import static ru.practicum.utils.TestInitDataUtil.getUserList;
-import static ru.practicum.utils.TestInitDataUtil.makeCategory;
-import static ru.practicum.utils.TestInitDataUtil.makeNewEventWithCorrectData;
-import static ru.practicum.utils.TestInitDataUtil.makeUser;
+import static ru.practicum.utils.TestInitDataUtil.*;
 
 @ExtendWith(MockitoExtension.class)
 class PrivetEventServiceImplTest {
+    private final long userId = 2L;
+    private final long eventId = 1L;
+    private final int from = 0;
+    private final int size = 10;
     @Mock
     private EventRepository repository;
     @Mock
@@ -67,12 +61,6 @@ class PrivetEventServiceImplTest {
     private LocationService locationService;
     @InjectMocks
     private EventServiceImpl service;
-
-    private final long userId = 2L;
-    private final long eventId = 1L;
-    private final int from = 0;
-    private final int size = 10;
-
     private List<Event> eventList;
     private User user;
     private Category category;

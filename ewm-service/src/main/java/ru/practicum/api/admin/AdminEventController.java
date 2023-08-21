@@ -67,35 +67,6 @@ public class AdminEventController {
         return eventService.getEventsByAdmin(searchParameters);
     }
 
-//    @GetMapping
-//    public List<EventFullDto> getEventsByAdmin(
-//            @RequestParam(value = "users", required = false) List<Long> users,
-//            @RequestParam(value = "states", required = false) List<String> states,
-//            @RequestParam(value = "categories", required = false) List<Long> categories,
-//            @RequestParam(value = "rangeStart", required = false)
-//            @DateTimeFormat(pattern = YYYY_MM_DD_HH_MM_SS) LocalDateTime rangeStart,
-//            @RequestParam(value = "rangeEnd", required = false)
-//            @DateTimeFormat(pattern = YYYY_MM_DD_HH_MM_SS) LocalDateTime rangeEnd,
-//            @PositiveOrZero @RequestParam(value = "from", defaultValue = Constants.FROM) Integer from,
-//            @Positive @RequestParam(value = "size", defaultValue = Constants.PAGE_SIZE) Integer size
-//    ) {
-//        log.debug("Request received GET /admin/events");
-//        log.debug("RequestParams: users={}, states={}, categories={}, rangeStart={}, rangeEnd={}, from={}, size={}",
-//                users, states, categories, rangeStart, rangeEnd, from, size);
-//
-//        EventSearchParameters searchParameters = new EventSearchParameters();
-//        searchParameters.setUsers(users);
-//        searchParameters.setStates(states);
-//        searchParameters.setCategories(categories);
-//        searchParameters.setRangeStart(rangeStart);
-//        searchParameters.setRangeEnd(rangeEnd);
-//        searchParameters.setFrom(from);
-//        searchParameters.setSize(size);
-//
-//        return eventService.getEventsByAdmin(searchParameters);
-//    }
-
-
     @PatchMapping("/{eventId}")
     public EventFullDto updateEventByAdmin(@Valid @RequestBody(required = false) UpdateEventAdminRequest body,
                                            @PathVariable long eventId) {

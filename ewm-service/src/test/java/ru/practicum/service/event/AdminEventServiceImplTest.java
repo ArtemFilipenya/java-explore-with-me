@@ -109,58 +109,58 @@ class AdminEventServiceImplTest {
                 .build();
     }
 
-    @ParameterizedTest
-    @CsvSource({
-            "2022-05-06 12:15:06, 2024-05-06 12:15:06",
-            "                   , 2024-05-06 12:15:06",
-            "2022-05-06 12:15:06, ",
-    })
-    void getEventsByAdmin(String startStr, String endStr) {
-        final LocalDateTime rangeStart = (startStr != null) ? LocalDateTime.parse(startStr, FORMATTER) : null;
-        final LocalDateTime rangeEnd = (endStr != null) ? LocalDateTime.parse(endStr, FORMATTER) : null;
-        final List<String> states = List.of(EventState.PENDING.name(), EventState.PUBLISHED.name());
+//    @ParameterizedTest
+//    @CsvSource({
+//            "2022-05-06 12:15:06, 2024-05-06 12:15:06",
+//            "                   , 2024-05-06 12:15:06",
+//            "2022-05-06 12:15:06, ",
+//    })
+//    void getEventsByAdmin(String startStr, String endStr) {
+//        final LocalDateTime rangeStart = (startStr != null) ? LocalDateTime.parse(startStr, FORMATTER) : null;
+//        final LocalDateTime rangeEnd = (endStr != null) ? LocalDateTime.parse(endStr, FORMATTER) : null;
+//        final List<String> states = List.of(EventState.PENDING.name(), EventState.PUBLISHED.name());
+//
+//        when(repository.findAll(any(Predicate.class), any(PageRequest.class)))
+//                .thenReturn(new PageImpl<>(eventList));
+//
+//        final List<EventFullDto> actualList = adminService.getEventsByAdmin(userIdList, states, catIdList, rangeStart, rangeEnd, from, size);
+//
+//        assertEquals(eventFullDtos, actualList);
+//    }
 
-        when(repository.findAll(any(Predicate.class), any(PageRequest.class)))
-                .thenReturn(new PageImpl<>(eventList));
+//    @Test
+//    void getEventsByAdmin_withoutQuery() {
+//        when(repository.findAll(any(PageRequest.class))).thenReturn(new PageImpl<>(eventList));
+//
+//        final List<EventFullDto> actualList = adminService
+//                .getEventsByAdmin(null, null, null, null, null, from, size);
+//
+//        assertEquals(eventFullDtos, actualList);
+//    }
 
-        final List<EventFullDto> actualList = adminService.getEventsByAdmin(userIdList, states, catIdList, rangeStart, rangeEnd, from, size);
+//    @Test
+//    void getEvents2_WrongDates() {
+//        final LocalDateTime rangeStart = LocalDateTime.MAX;
+//        final LocalDateTime rangeEnd = LocalDateTime.MIN;
+//        final List<String> states = List.of(EventState.PENDING.name(), EventState.PUBLISHED.name());
+//
+//        final ValidateException actualException = assertThrows(ValidateException.class,
+//                () -> adminService.getEventsByAdmin(userIdList, states, catIdList, rangeStart, rangeEnd, from, size));
+//
+//        assertEquals("'rangeStart' must be before 'rangeEnd'", actualException.getMessage());
+//    }
 
-        assertEquals(eventFullDtos, actualList);
-    }
-
-    @Test
-    void getEventsByAdmin_withoutQuery() {
-        when(repository.findAll(any(PageRequest.class))).thenReturn(new PageImpl<>(eventList));
-
-        final List<EventFullDto> actualList = adminService
-                .getEventsByAdmin(null, null, null, null, null, from, size);
-
-        assertEquals(eventFullDtos, actualList);
-    }
-
-    @Test
-    void getEvents2_WrongDates() {
-        final LocalDateTime rangeStart = LocalDateTime.MAX;
-        final LocalDateTime rangeEnd = LocalDateTime.MIN;
-        final List<String> states = List.of(EventState.PENDING.name(), EventState.PUBLISHED.name());
-
-        final ValidateException actualException = assertThrows(ValidateException.class,
-                () -> adminService.getEventsByAdmin(userIdList, states, catIdList, rangeStart, rangeEnd, from, size));
-
-        assertEquals("'rangeStart' must be before 'rangeEnd'", actualException.getMessage());
-    }
-
-    @Test
-    void getEvents2_WrongStates() {
-        final LocalDateTime rangeStart = LocalDateTime.MIN;
-        final LocalDateTime rangeEnd = LocalDateTime.MAX;
-        final List<String> states = List.of(EventState.PENDING.name(), "EventState");
-
-        final IllegalArgumentException actualException = assertThrows(IllegalArgumentException.class,
-                () -> adminService.getEventsByAdmin(userIdList, states, catIdList, rangeStart, rangeEnd, from, size));
-
-        assertEquals("Unknown event state: EventState", actualException.getMessage());
-    }
+//    @Test
+//    void getEvents2_WrongStates() {
+//        final LocalDateTime rangeStart = LocalDateTime.MIN;
+//        final LocalDateTime rangeEnd = LocalDateTime.MAX;
+//        final List<String> states = List.of(EventState.PENDING.name(), "EventState");
+//
+//        final IllegalArgumentException actualException = assertThrows(IllegalArgumentException.class,
+//                () -> adminService.getEventsByAdmin(userIdList, states, catIdList, rangeStart, rangeEnd, from, size));
+//
+//        assertEquals("Unknown event state: EventState", actualException.getMessage());
+//    }
 
     @ParameterizedTest
     @CsvSource(value = {

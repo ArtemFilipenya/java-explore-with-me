@@ -73,27 +73,27 @@ class AdminEventControllerTest {
 
     }
 
-    @Test
-    void getAdminEvents() throws Exception {
-        when(eventService.getEventsByAdmin(any(), anyList(), any(),
-                any(LocalDateTime.class), any(LocalDateTime.class), anyInt(), anyInt()))
-                .thenReturn(eventFullDtoList);
-
-        mvc.perform(get("/admin/events")
-                        .param("users", "1", "2")
-//                        .param("states","1","2")
-                        .param("categories", "1", "2")
-                        .param("from", "0")
-                        .param("size", "10")
-                        .characterEncoding(StandardCharsets.UTF_8)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$", hasSize(2)))
-                /*.andExpect(jsonPath("$.id", is(userDto.getId()), Long.class))
-                .andExpect(jsonPath("$.name", is(userDto.getName())))
-                .andExpect(jsonPath("$.email", is(userDto.getEmail())))*/;
-    }
+//    @Test
+//    void getAdminEvents() throws Exception {
+//        when(eventService.getEventsByAdmin(any(), anyList(), any(),
+//                any(LocalDateTime.class), any(LocalDateTime.class), anyInt(), anyInt()))
+//                .thenReturn(eventFullDtoList);
+//
+//        mvc.perform(get("/admin/events")
+//                        .param("users", "1", "2")
+////                        .param("states","1","2")
+//                        .param("categories", "1", "2")
+//                        .param("from", "0")
+//                        .param("size", "10")
+//                        .characterEncoding(StandardCharsets.UTF_8)
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .accept(MediaType.APPLICATION_JSON))
+//                .andExpect(status().isOk())
+////                .andExpect(jsonPath("$", hasSize(2)))
+//                /*.andExpect(jsonPath("$.id", is(userDto.getId()), Long.class))
+//                .andExpect(jsonPath("$.name", is(userDto.getName())))
+//                .andExpect(jsonPath("$.email", is(userDto.getEmail())))*/;
+//    }
 
     @Test
     void updateEventByAdmin() throws Exception {

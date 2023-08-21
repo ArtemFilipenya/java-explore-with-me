@@ -6,11 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.dto.event.EventFullDto;
-import ru.practicum.dto.event.EventShortDto;
-import ru.practicum.dto.event.NewEventDto;
-import ru.practicum.dto.event.UpdateEventAdminRequest;
-import ru.practicum.dto.event.UpdateEventUserRequest;
+import ru.practicum.dto.event.*;
 import ru.practicum.dto.location.LocationDto;
 import ru.practicum.enums.EventState;
 import ru.practicum.enums.EventStateAction;
@@ -35,29 +31,18 @@ import ru.practicum.utils.QPredicate;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static ru.practicum.enums.EventState.*;
-import static ru.practicum.enums.EventStateAction.CANCEL_REVIEW;
-import static ru.practicum.enums.EventStateAction.PUBLISH_EVENT;
-import static ru.practicum.enums.EventStateAction.REJECT_EVENT;
-import static ru.practicum.enums.EventStateAction.SEND_TO_REVIEW;
-import static ru.practicum.utils.Constants.EVENT_WITH_ID_D_WAS_NOT_FOUND;
-import static ru.practicum.utils.Constants.START;
-import static ru.practicum.utils.Constants.THE_REQUIRED_OBJECT_WAS_NOT_FOUND;
+import static ru.practicum.enums.EventStateAction.*;
+import static ru.practicum.utils.Constants.*;
 
 @Service
 @RequiredArgsConstructor
 public class EventServiceImpl implements EventService {
     private static final String EVENT_DATE_AND_TIME_IS_BEFORE = "Event date and time cannot be earlier than %d hours from the";
     private final EventRepository eventRepository;
-
     private final UserService userService;
     private final CategoryService categoryService;
     private final LocationService locationService;
@@ -66,7 +51,6 @@ public class EventServiceImpl implements EventService {
     @Override
     @Transactional
     public EventFullDto saveEvent(long userId, NewEventDto body) {
-//        дата и время на которые намечено событие не может быть раньше, чем через два часа от текущего момента
         confirmEventDateIsAfterCurrent(body.getEventDate(), 2);
         final User user = userService.findUserById(userId);
         final Category category = categoryService.findCategoryById(body.getCategory());
@@ -95,26 +79,30 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<EventFullDto> getEventsByAdmin(List<Long> users, List<String> states, List<Long> categories,
-                                               LocalDateTime rangeStart, LocalDateTime rangeEnd,
-                                               Integer from, Integer size) {
+    public List<EventFullDto> getEventsByAdmin(EventSearchParameters searchParameters) {
+        confirmStartBeforeEnd(searchParameters.getRangeStart(), searchParameters.getRangeEnd());
 
-        confirmStartBeforeEnd(rangeStart, rangeEnd);
+        final List<EventState> stateList = (searchParameters.getStates() == null)
+                ? null
+                : getEventStates(searchParameters.getStates());
 
-        final List<EventState> stateList = (states == null) ? null : getEventStates(states);
-        final PageRequest page = PageRequest.of(from / size, size);
+        final PageRequest page = PageRequest.of(searchParameters.getFrom() / searchParameters.getSize(),
+                searchParameters.getSize());
+
         final EventFilter filter = EventFilter.builder()
-                .initiatorIn(users)
-                .categoryIn(categories)
-                .eventDateAfter(rangeStart)
-                .eventDateBefore(rangeEnd)
+                .initiatorIn(searchParameters.getUsers())
+                .categoryIn(searchParameters.getCategories())
+                .eventDateAfter(searchParameters.getRangeStart())
+                .eventDateBefore(searchParameters.getRangeEnd())
                 .statesIn(stateList)
                 .build();
+
         final Predicate predicate = EventPredicate.getAndEventPredicate(filter);
 
         final List<Event> events = (predicate == null)
                 ? eventRepository.findAll(page).getContent()
                 : eventRepository.findAll(predicate, page).getContent();
+
         return events.stream()
                 .map(EventMapper::toFullDto)
                 .collect(Collectors.toList());
@@ -302,20 +290,26 @@ public class EventServiceImpl implements EventService {
                 : PageRequest.of(from / size, size).withSort(Sort.by(sortType.getName()));
     }
 
-    /** Получение списка статусов */
+    /**
+     * Получение списка статусов
+     */
     private List<EventState> getEventStates(List<String> states) {
         return states.stream()
                 .map(EventState::from)
                 .collect(Collectors.toList());
     }
 
-    /** Получить просмотры события */
+    /**
+     * Получить просмотры события
+     */
     private static long getView(HttpServletRequest request, Map<String, Long> viewStats, Long eventId) {
         final String uri = request.getRequestURI() + "/" + eventId;
         return viewStats.getOrDefault(uri, 0L);
     }
 
-    /** Получить событие пользователя */
+    /**
+     * Получить событие пользователя
+     */
     private Event getEventForUser(long userId, long eventId) {
         return eventRepository.findByIdAndInitiatorId(eventId, userId)
                 .orElseThrow(() -> new NotFoundException(
@@ -348,7 +342,9 @@ public class EventServiceImpl implements EventService {
         }
     }
 
-    /** Обновление статуса для public api */
+    /**
+     * Обновление статуса для public api
+     */
     private void updateStatusByUser(UpdateEventUserRequest body, Event event) {
         final EventStateAction newEventState = body.getStateAction();
         if (newEventState == null) return;
@@ -358,7 +354,9 @@ public class EventServiceImpl implements EventService {
         event.setState(newEventState.getEventState());
     }
 
-    /** Обновление статуса admin api */
+    /**
+     * Обновление статуса admin api
+     */
     private void updateStatusByAdmin(UpdateEventAdminRequest body, Event event) {
         final EventStateAction newEventState = body.getStateAction();
         if (newEventState == null) return;

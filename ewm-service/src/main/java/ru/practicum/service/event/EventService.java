@@ -32,20 +32,7 @@ public interface EventService {
 
     List<EventShortDto> getEvents(long userId, int from, int size);
 
-    /**
-     * Поиск событий
-     * @param users список id пользователей, чьи события нужно найти
-     * @param states список состояний в которых находятся искомые события
-     * @param categories список id категорий в которых будет вестись поиск
-     * @param rangeStart дата и время не раньше которых должно произойти событие
-     * @param rangeEnd дата и время не позже которых должно произойти событие
-     * @param from количество событий, которые нужно пропустить для формирования текущего набора default: 0
-     * @param size количество событий в наборе default: 10
-     * @return возвращает полную информацию обо всех событиях подходящих под переданные условия
-     * - если по заданным фильтрам не найдено ни одного события, возвращает пустой список
-     */
-    List<EventFullDto> getEventsByAdmin(List<Long> users, List<String> states, List<Long> categories,
-                                        LocalDateTime rangeStart, LocalDateTime rangeEnd, Integer from, Integer size);
+    List<EventFullDto> getEventsByAdmin(EventSearchParameters searchParameters);
 
     /**
      * @param body

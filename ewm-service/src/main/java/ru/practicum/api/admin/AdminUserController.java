@@ -45,15 +45,14 @@ public class AdminUserController {
                                   @RequestParam(value = "from", defaultValue = Constants.FROM) Integer from,
                                   @Positive
                                   @RequestParam(value = "size", defaultValue = Constants.PAGE_SIZE) Integer size) {
-        if (ids != null) {
-            log.debug("Request received GET /admin/users?{}&from={}&size={}",
-                    ids.stream().map(aLong -> "ids=" + aLong).collect(Collectors.joining("&")),
-                    from, size);
-        } else {
-            log.debug("Request received GET /admin/users?from={}&size={}", from, size);
-        }
+        String requestParams = ids != null ?
+                ids.stream().map(aLong -> "ids=" + aLong).collect(Collectors.joining("&")) : "";
+
+        log.debug("Request received GET /admin/users?{}&from={}&size={}", requestParams, from, size);
+
         return userService.getUsers(ids, from, size);
     }
+
 
     @DeleteMapping("/{userId}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)

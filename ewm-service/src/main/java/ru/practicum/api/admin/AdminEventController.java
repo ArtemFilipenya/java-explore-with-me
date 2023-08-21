@@ -32,23 +32,28 @@ import static ru.practicum.Constants.YYYY_MM_DD_HH_MM_SS;
 public class AdminEventController {
     private final EventService eventService;
 
+    /**
+     * Получение списка событий администратором с заданными фильтрами.
+     *
+     * @param users       Список ID пользователей, чьи события нужно найти.
+     * @param states      Список состояний, в которых находятся искомые события.
+     * @param categories  Список ID категорий, в которых будет вестись поиск.
+     * @param rangeStart  Дата и время, не ранее которых должно произойти событие.
+     * @param rangeEnd    Дата и время, не позже которых должно произойти событие.
+     * @param from        Количество событий, которые нужно пропустить для формирования текущего набора.
+     * @param size        Количество событий в наборе.
+     * @return Список событий с заданными фильтрами.
+     */
     @GetMapping
     public List<EventFullDto> getEventsByAdmin(
-            //список id пользователей, чьи события нужно найти
             @RequestParam(value = "users", required = false) List<Long> users,
-            //список состояний в которых находятся искомые события
             @RequestParam(value = "states", required = false) List<String> states,
-            //список id категорий в которых будет вестись поиск
             @RequestParam(value = "categories", required = false) List<Long> categories,
-            //дата и время не раньше которых должно произойти событие
             @RequestParam(value = "rangeStart", required = false)
             @DateTimeFormat(pattern = YYYY_MM_DD_HH_MM_SS) LocalDateTime rangeStart,
-            //дата и время не позже которых должно произойти событие
             @RequestParam(value = "rangeEnd", required = false)
             @DateTimeFormat(pattern = YYYY_MM_DD_HH_MM_SS) LocalDateTime rangeEnd,
-            //количество событий, которые нужно пропустить для формирования текущего набора
             @PositiveOrZero @RequestParam(value = "from", defaultValue = Constants.FROM) Integer from,
-            //количество событий в наборе
             @Positive @RequestParam(value = "size", defaultValue = Constants.PAGE_SIZE) Integer size
     ) {
         log.debug("Request received GET /admin/events");

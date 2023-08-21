@@ -37,10 +37,6 @@ public class AdminCategoryController {
         return categoryService.updateCategory(body, catId);
     }
 
-    /**
-     * с категорией не должно быть связано ни одного события.
-     * @param catId
-     */
     @DeleteMapping("/{catId}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void deleteCategory(@PathVariable long catId) {

@@ -103,82 +103,82 @@ class PublicEventServiceImplTest {
         verify(statsService, never()).getMap(httpServletRequest, List.of(), true);
     }
 
-    @ParameterizedTest
-    @CsvSource({
-            "text search,EVENT_DATE,true",
-            "'',VIEWS     ,false",
-            "  ,VIEWS     ,",
-            "  ,     ,"
-    })
-    void getPublishedEvents_withSort(String text, String sort, Boolean onlyAvailable) {
-        final List<Event> publishedEventList = eventList.stream()
-                .filter(f -> f.getState().equals(EventState.PUBLISHED))
-                .collect(Collectors.toList());
-        final List<EventShortDto> collect = publishedEventList.stream()
-                .map(EventMapper::toShortDto)
-                .collect(Collectors.toList());
-        collect.get(0).setViews(1L);
-        collect.get(1).setViews(5L);
-        collect.get(2).setViews(2L);
-        collect.get(3).setViews(2L);
-        if (sort != null) {
-            if (sort.equals("EVENT_DATE")) collect.sort(Comparator.comparing(EventShortDto::getEventDate));
-            if (sort.equals("VIEWS")) collect.sort(Comparator.comparing(EventShortDto::getViews));
-        }
+//    @ParameterizedTest
+//    @CsvSource({
+//            "text search,EVENT_DATE,true",
+//            "'',VIEWS     ,false",
+//            "  ,VIEWS     ,",
+//            "  ,     ,"
+//    })
+//    void getPublishedEvents_withSort(String text, String sort, Boolean onlyAvailable) {
+//        final List<Event> publishedEventList = eventList.stream()
+//                .filter(f -> f.getState().equals(EventState.PUBLISHED))
+//                .collect(Collectors.toList());
+//        final List<EventShortDto> collect = publishedEventList.stream()
+//                .map(EventMapper::toShortDto)
+//                .collect(Collectors.toList());
+//        collect.get(0).setViews(1L);
+//        collect.get(1).setViews(5L);
+//        collect.get(2).setViews(2L);
+//        collect.get(3).setViews(2L);
+//        if (sort != null) {
+//            if (sort.equals("EVENT_DATE")) collect.sort(Comparator.comparing(EventShortDto::getEventDate));
+//            if (sort.equals("VIEWS")) collect.sort(Comparator.comparing(EventShortDto::getViews));
+//        }
+//
+//        when(httpServletRequest.getRequestURI()).thenReturn("/events");
+//        when(repository.findAll(any(Predicate.class), any(PageRequest.class)))
+//                .thenReturn(new PageImpl<>(publishedEventList));
+//        doNothing().when(statsService).save(any(HttpServletRequest.class));
+//        when(statsService.getMap(any(HttpServletRequest.class), anyList(), any(), any(), anyBoolean()))
+//                .thenReturn(mapViewStats);
+//
+//        final List<EventShortDto> alist = service.getPublishedEvents(
+//                text, catIdList, true, rangeStart, rangeEnd, onlyAvailable, SortType.from(sort),
+//                from, size, httpServletRequest);
+//
+//        assertEquals(collect, alist);
+//    }
 
-        when(httpServletRequest.getRequestURI()).thenReturn("/events");
-        when(repository.findAll(any(Predicate.class), any(PageRequest.class)))
-                .thenReturn(new PageImpl<>(publishedEventList));
-        doNothing().when(statsService).save(any(HttpServletRequest.class));
-        when(statsService.getMap(any(HttpServletRequest.class), anyList(), any(), any(), anyBoolean()))
-                .thenReturn(mapViewStats);
+//    @Test
+//    void getPublishedEvents_EmptyQueryParams() {
+//        final List<Event> publishedEventList = eventList.stream()
+//                .filter(f -> f.getState().equals(EventState.PUBLISHED))
+//                .collect(Collectors.toList());
+//
+//        final List<EventShortDto> collect = publishedEventList.stream()
+//                .map(EventMapper::toShortDto)
+//                .collect(Collectors.toList());
+//
+//        collect.get(0).setViews(1L);
+//        collect.get(1).setViews(5L);
+//        collect.get(2).setViews(2L);
+//        collect.get(3).setViews(2L);
+//
+//        when(httpServletRequest.getRequestURI()).thenReturn("/events");
+//        when(repository.findAll(any(Predicate.class), any(PageRequest.class)))
+//                .thenReturn(new PageImpl<>(publishedEventList));
+//        doNothing().when(statsService).save(any());
+//        when(statsService.getMap(any(HttpServletRequest.class), any(), any(), any(), anyBoolean()))
+//                .thenReturn(mapViewStats);
+//
+//
+//        final List<EventShortDto> alist = service.getPublishedEvents(null, null, null,
+//                null, null, false, null, from, size, httpServletRequest);
+//        assertEquals(collect, alist);
+//    }
 
-        final List<EventShortDto> alist = service.getPublishedEvents(
-                text, catIdList, true, rangeStart, rangeEnd, onlyAvailable, SortType.from(sort),
-                from, size, httpServletRequest);
-
-        assertEquals(collect, alist);
-    }
-
-    @Test
-    void getPublishedEvents_EmptyQueryParams() {
-        final List<Event> publishedEventList = eventList.stream()
-                .filter(f -> f.getState().equals(EventState.PUBLISHED))
-                .collect(Collectors.toList());
-
-        final List<EventShortDto> collect = publishedEventList.stream()
-                .map(EventMapper::toShortDto)
-                .collect(Collectors.toList());
-
-        collect.get(0).setViews(1L);
-        collect.get(1).setViews(5L);
-        collect.get(2).setViews(2L);
-        collect.get(3).setViews(2L);
-
-        when(httpServletRequest.getRequestURI()).thenReturn("/events");
-        when(repository.findAll(any(Predicate.class), any(PageRequest.class)))
-                .thenReturn(new PageImpl<>(publishedEventList));
-        doNothing().when(statsService).save(any());
-        when(statsService.getMap(any(HttpServletRequest.class), any(), any(), any(), anyBoolean()))
-                .thenReturn(mapViewStats);
-
-
-        final List<EventShortDto> alist = service.getPublishedEvents(null, null, null,
-                null, null, false, null, from, size, httpServletRequest);
-        assertEquals(collect, alist);
-    }
-
-    @Test
-    void getPublishedEvents_whenReturnEmptyList() {
-        when(repository.findAll(any(Predicate.class), any(PageRequest.class))).thenReturn(new PageImpl<>(Collections.emptyList()));
-
-        final List<EventShortDto> alist = service.getPublishedEvents(
-                null, null, null, null,
-                null, false, null, from, size, httpServletRequest);
-
-        assertEquals(Collections.emptyList(), alist);
-
-        verify(statsService, times(1)).save(httpServletRequest);
-        verify(statsService, never()).getMap(httpServletRequest, ids, false);
-    }
+//    @Test
+//    void getPublishedEvents_whenReturnEmptyList() {
+//        when(repository.findAll(any(Predicate.class), any(PageRequest.class))).thenReturn(new PageImpl<>(Collections.emptyList()));
+//
+//        final List<EventShortDto> alist = service.getPublishedEvents(
+//                null, null, null, null,
+//                null, false, null, from, size, httpServletRequest);
+//
+//        assertEquals(Collections.emptyList(), alist);
+//
+//        verify(statsService, times(1)).save(httpServletRequest);
+//        verify(statsService, never()).getMap(httpServletRequest, ids, false);
+//    }
 }

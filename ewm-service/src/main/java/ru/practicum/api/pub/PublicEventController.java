@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.dto.event.EventFullDto;
 import ru.practicum.dto.event.EventShortDto;
 import ru.practicum.enums.SortType;
+import ru.practicum.service.event.EventQuery;
 import ru.practicum.service.event.EventService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -52,7 +53,17 @@ public class PublicEventController {
         log.debug("Request received GET /events");
         log.debug("RequestParams: text='{}',categories={},paid={},rangeStart={},rangeEnd={},onlyAvailable={},sort='{}',from={},size={}",
                 text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size);
-        return eventService.getPublishedEvents(
-                text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size, request);
+        EventQuery query = new EventQuery();
+        query.setText(text);
+        query.setCategories(categories);
+        query.setPaid(paid);
+        query.setRangeStart(rangeStart);
+        query.setRangeEnd(rangeEnd);
+        query.setOnlyAvailable(onlyAvailable);
+        query.setSort(sort);
+        query.setFrom(from);
+        query.setSize(size);
+
+        return eventService.getPublishedEvents(query, request);
     }
 }

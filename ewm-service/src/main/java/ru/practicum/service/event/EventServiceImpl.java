@@ -170,33 +170,29 @@ public class EventServiceImpl implements EventService {
      * нужно сохранить в сервисе статистики<br>
      */
     @Override
-    public List<EventShortDto> getPublishedEvents(String text, List<Long> categories, Boolean paid,
-                                                  LocalDateTime rangeStart, LocalDateTime rangeEnd,
-                                                  Boolean onlyAvailable,
-                                                  SortType sort,//по дате события или по количеству просмотров
-                                                  Integer from, Integer size, HttpServletRequest request) {
-        confirmStartBeforeEnd(rangeStart, rangeEnd);
+    public List<EventShortDto> getPublishedEvents(EventQuery query, HttpServletRequest request) {
+        confirmStartBeforeEnd(query.getRangeStart(), query.getRangeEnd());
 
-        final PageRequest page = getPageRequest(sort, from, size);
+        final PageRequest page = getPageRequest(query.getSort(), query.getFrom(), query.getSize());
 
-        final List<Predicate> predicateList = getPredicates(text, categories, paid, rangeStart, rangeEnd, onlyAvailable);
+        final List<Predicate> predicateList = getPredicates(query.getText(), query.getCategories(), query.getPaid(),
+                query.getRangeStart(), query.getRangeEnd(), query.getOnlyAvailable());
         final Predicate predicate = QPredicate.buildAnd(predicateList);
         final List<Event> events = eventRepository.findAll(predicate, page).getContent();
 
         statsService.save(request);
         if (events.isEmpty()) return Collections.emptyList();
 
-
         final Map<String, Long> mapViewStats = getViewStats(request, events, false);
         List<EventShortDto> eventShortDtoList = events.stream()
                 .map(event -> EventMapper.toShortDto(event, getView(request, mapViewStats, event.getId())))
                 .collect(Collectors.toList());
 
-        return needSortByViews(sort)
+        return needSortByViews(query.getSort())
                 ? getSortedList(eventShortDtoList)
                 : eventShortDtoList;
-
     }
+
 
     @Override
     @Transactional

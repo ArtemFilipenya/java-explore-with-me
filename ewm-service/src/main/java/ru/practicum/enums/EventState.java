@@ -2,7 +2,7 @@ package ru.practicum.enums;
 
 import lombok.Getter;
 
-import static ru.practicum.mapper.EnumMapper.getEnumFromString;
+import ru.practicum.mapper.EnumMapper;
 
 @Getter
 public enum EventState {
@@ -11,7 +11,6 @@ public enum EventState {
     PUBLISHED;
 
     public static EventState from(String name) {
-        return getEnumFromString(EventState.class, name, "Unknown event state");
+        return EnumMapper.getEnumFromString(EventState.class, name, "Unknown event state");
     }
-
 }

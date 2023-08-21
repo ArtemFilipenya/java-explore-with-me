@@ -3,7 +3,7 @@ package ru.practicum.enums;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.Getter;
 
-import static ru.practicum.mapper.EnumMapper.getEnumFromString;
+import ru.practicum.mapper.EnumMapper;
 
 @Getter
 public enum EventStateAction {
@@ -20,6 +20,6 @@ public enum EventStateAction {
 
     @JsonCreator
     public static EventStateAction from(String name) {
-        return getEnumFromString(EventStateAction.class, name, "Unknown event state action");
+        return EnumMapper.getEnumFromString(EventStateAction.class, name, "Unknown event state action");
     }
 }

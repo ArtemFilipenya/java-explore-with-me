@@ -16,9 +16,6 @@ import java.time.LocalDateTime;
 
 import static ru.practicum.Constants.YYYY_MM_DD_HH_MM_SS;
 
-/**
- * Новое событие
- */
 @Data
 @Builder(toBuilder = true)
 @NoArgsConstructor
@@ -47,20 +44,13 @@ public class NewEventDto {
     @NotNull(message = "Location cannot be empty or null")
     private LocationDto location;
 
-    //Нужно ли оплачивать участие в событии
     @NotNull(message = "Paid cannot be empty or null")
     private boolean paid = false;
 
-    //Ограничение на количество участников. Значение 0 - означает отсутствие ограничения
     @NotNull(message = "Participant limit cannot be empty or null")
     @PositiveOrZero(message = "Participant limit must be positive or zero")
     private Integer participantLimit = 0;
-    /*
-    Нужна ли пре-модерация заявок на участие.
-    Если true, то все заявки будут ожидать подтверждения инициатором события.
-    Если false - то будут подтверждаться автоматически.
-     */
+
     @NotNull(message = "Request moderation cannot be empty or null")
     private boolean requestModeration = true;
-
 }

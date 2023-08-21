@@ -53,7 +53,6 @@ public class AdminUserController {
         return userService.getUsers(ids, from, size);
     }
 
-
     @DeleteMapping("/{userId}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void delete(@PathVariable(value = "userId") long userId) {

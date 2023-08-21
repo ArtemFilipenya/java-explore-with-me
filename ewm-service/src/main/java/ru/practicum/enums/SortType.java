@@ -2,8 +2,7 @@ package ru.practicum.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.Getter;
-
-import static ru.practicum.mapper.EnumMapper.getEnumFromString;
+import ru.practicum.mapper.EnumMapper;
 
 @Getter
 public enum SortType {
@@ -18,6 +17,6 @@ public enum SortType {
 
     @JsonCreator
     public static SortType from(String name) {
-        return getEnumFromString(SortType.class, name,"Unknown sort type");
+        return EnumMapper.getEnumFromString(SortType.class, name, "Unknown sort type");
     }
 }

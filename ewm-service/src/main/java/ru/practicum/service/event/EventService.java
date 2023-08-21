@@ -1,11 +1,9 @@
 package ru.practicum.service.event;
 
 import ru.practicum.dto.event.*;
-import ru.practicum.enums.SortType;
 import ru.practicum.model.Event;
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDateTime;
 import java.util.List;
 
 public interface EventService {

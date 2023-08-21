@@ -2,6 +2,7 @@ package ru.practicum.exeption;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -42,5 +43,10 @@ public class ErrorHandler {
         final String messageErr = String.format("An unexpected error has occurred: %s", e.getMessage());
         log.error(messageErr);
         return new ErrorResponse(messageErr);
+    }
+
+    @ExceptionHandler(MissingParameterException.class)
+    public ResponseEntity<String> handleMissingParameterException(MissingParameterException ex) {
+        return ResponseEntity.badRequest().body(ex.getMessage());
     }
 }

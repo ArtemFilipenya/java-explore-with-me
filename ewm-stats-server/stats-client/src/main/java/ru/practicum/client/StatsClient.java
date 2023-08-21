@@ -14,9 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static ru.practicum.Constants.FORMATTER;
-import static ru.practicum.Constants.HIT_ENDPOINT;
-import static ru.practicum.Constants.STATS_ENDPOINT;
+import static ru.practicum.Constants.*;
 
 @Service
 @Slf4j
@@ -25,7 +23,7 @@ public class StatsClient {
     private final RestTemplate restTemplate;
 
     @Autowired
-    public StatsClient(@Value("${ewm-stats-server-client.url}") String serverUrl) {
+    public StatsClient(@Value("${ewm-stats-server.url}") String serverUrl) {
         this.serverUrl = serverUrl;
         this.restTemplate = new RestTemplate();
     }
@@ -43,7 +41,7 @@ public class StatsClient {
             path.add("end={end}");
         }
         if (uris != null && !uris.isEmpty()) {
-            parameters.put("uris", String.join("&uris=", uris));
+            parameters.put("uris", String.join(",", uris));
             path.add("uris={uris}");
         }
 

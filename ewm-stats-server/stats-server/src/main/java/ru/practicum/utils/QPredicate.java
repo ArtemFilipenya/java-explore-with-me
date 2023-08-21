@@ -14,6 +14,10 @@ public class QPredicate {
 
     private final List<Predicate> predicates = new ArrayList<>();
 
+    public static QPredicate builder() {
+        return new QPredicate();
+    }
+
     public <T> QPredicate add(T object, Function<T, Predicate> function) {
         if (object != null) {
             predicates.add(function.apply(object));
@@ -23,9 +27,5 @@ public class QPredicate {
 
     public Predicate buildAnd() {
         return ExpressionUtils.allOf(predicates);
-    }
-
-    public static QPredicate builder() {
-        return new QPredicate();
     }
 }

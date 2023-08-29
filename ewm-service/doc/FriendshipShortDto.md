@@ -4,4 +4,4 @@
 Name | Type                             | Description | Notes
 ------------ |----------------------------------| ------------- | -------------
 **id** | **Long**                         | Идентификатор запроса на подписку |  [optional]
-**frieand** | UserShortDto |  |  [optional]
+**friend** | UserShortDto |  |  [optional]

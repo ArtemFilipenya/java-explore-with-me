@@ -29,9 +29,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
-import static ru.practicum.enums.FriendshipState.APPROVED;
-import static ru.practicum.enums.FriendshipState.PENDING;
-import static ru.practicum.enums.FriendshipState.REJECTED;
+import static ru.practicum.enums.FriendshipState.*;
 
 @ExtendWith(MockitoExtension.class)
 class FriendshipServiceTest {

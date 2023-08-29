@@ -12,7 +12,7 @@
     }
   ],
   "defaultContentType": "application/json",
-   "tags": [
+  "tags": [
     {
       "description": "Приватный API для работы с запросами на дружбу",
       "name": "Private Friendship API: Запрос на дружбу"
@@ -125,7 +125,7 @@
           }
         },
         "tags": [
-           "Private Request API: Запросы на участие в событиях"
+          "Private Request API: Запросы на участие в событиях"
         ]
       }
     },
@@ -223,7 +223,7 @@
           }
         },
         "tags": [
-           "Private Request API: Запросы на участие в событиях"
+          "Private Request API: Запросы на участие в событиях"
         ]
       }
     },

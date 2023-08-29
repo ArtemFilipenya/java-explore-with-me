@@ -1,7 +1,7 @@
 package ru.practicum.service.subs;
 
-import ru.practicum.dto.subs.FriendshipShortDto;
 import ru.practicum.dto.subs.FriendshipDto;
+import ru.practicum.dto.subs.FriendshipShortDto;
 
 import java.util.List;
 

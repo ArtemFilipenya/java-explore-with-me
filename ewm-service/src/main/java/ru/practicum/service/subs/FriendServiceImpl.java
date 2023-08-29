@@ -28,7 +28,9 @@ public class FriendServiceImpl implements FriendService {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    /** Получение списка друзей */
+    /**
+     * Получение списка друзей
+     */
     @Override
     @Transactional(readOnly = true)
     public List<UserDto> getFriends(long userId) {
@@ -45,7 +47,9 @@ public class FriendServiceImpl implements FriendService {
         return UserMapper.toDto(fiends);
     }
 
-    /** Получить список событий в которых примут участие друзья */
+    /**
+     * Получить список событий в которых примут участие друзья
+     */
     @Override
     @Transactional(readOnly = true)
     public List<EventShortDto> getParticipateEvents(long followerId, int from, int size) {

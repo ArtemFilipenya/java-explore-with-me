@@ -30,10 +30,19 @@ public class FriendshipServiceImpl implements FriendshipService {
 
     private final UserService userService;
 
+    private static void approveFriendship(Friendship f) {
+        f.setState(FriendshipState.APPROVED);
+    }
+
+    private static void rejectFriendship(Friendship f) {
+        f.setState(FriendshipState.REJECTED);
+    }
+
     /**
      * Создать запрос на дружбу
+     *
      * @param followerId Id пользователя подавшего заявку на дружбу
-     * @param userId Id пользователя добавляемого в друзья
+     * @param userId     Id пользователя добавляемого в друзья
      */
     @Override
     @Transactional
@@ -57,8 +66,9 @@ public class FriendshipServiceImpl implements FriendshipService {
 
     /**
      * Подтверждение дружбы
+     *
      * @param userId Id пользователя, получившего запрос на дружбу
-     * @param ids набор идентификаторов запросов на дружбу
+     * @param ids    набор идентификаторов запросов на дружбу
      * @return пользователь со списком принятых запросов
      */
     @Override
@@ -75,7 +85,9 @@ public class FriendshipServiceImpl implements FriendshipService {
         return saved.stream().map(FriendshipMapper::toShortDto).collect(Collectors.toList());
     }
 
-    /** Отклонение запроса на дружбу */
+    /**
+     * Отклонение запроса на дружбу
+     */
     @Override
     @Transactional
     public List<FriendshipShortDto> rejectFriendship(long userId, List<Long> ids) {
@@ -90,7 +102,9 @@ public class FriendshipServiceImpl implements FriendshipService {
         return saved.stream().map(FriendshipMapper::toShortDto).collect(Collectors.toList());
     }
 
-    /** Получить фолловером списка запросов на дружбу */
+    /**
+     * Получить фолловером списка запросов на дружбу
+     */
     @Override
     @Transactional(readOnly = true)
     public List<FriendshipShortDto> getFriendshipRequests(long userId, String filter) {
@@ -100,7 +114,9 @@ public class FriendshipServiceImpl implements FriendshipService {
         return getRequestByFilter(filter, QFriendship.friendship.follower, userId);
     }
 
-    /** Получить пользователем списка поданных запросов на дружбу пользователем */
+    /**
+     * Получить пользователем списка поданных запросов на дружбу пользователем
+     */
     @Override
     @Transactional(readOnly = true)
     public List<FriendshipShortDto> getIncomingFriendRequests(long userId, String filter) {
@@ -110,7 +126,9 @@ public class FriendshipServiceImpl implements FriendshipService {
         return getRequestByFilter(filter, QFriendship.friendship.friend, userId);
     }
 
-    /** Отмена запроса на дружбу */
+    /**
+     * Отмена запроса на дружбу
+     */
     @Override
     @Transactional
     public void deleteFriendshipRequest(long followerId, long subsId) {
@@ -164,13 +182,5 @@ public class FriendshipServiceImpl implements FriendshipService {
         if (!allMatchUser) {
             throw new ConflictException("You can change only your requests.");
         }
-    }
-
-    private static void approveFriendship(Friendship f) {
-        f.setState(FriendshipState.APPROVED);
-    }
-
-    private static void rejectFriendship(Friendship f) {
-        f.setState(FriendshipState.REJECTED);
     }
 }

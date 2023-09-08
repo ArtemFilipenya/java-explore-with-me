@@ -4,6 +4,7 @@ DROP TABLE IF EXISTS events;
 DROP TABLE IF EXISTS categories;
 DROP TABLE IF EXISTS locations;
 DROP TABLE IF EXISTS compilation;
+DROP TABLE IF EXISTS friendship;
 DROP TABLE IF EXISTS users;
 
 CREATE TABLE IF NOT EXISTS users
@@ -24,7 +25,8 @@ CREATE TABLE IF NOT EXISTS users
     email VARCHAR
 (
     254
-) NOT NULL CONSTRAINT UQ_USER_EMAIL UNIQUE
+) NOT NULL CONSTRAINT UQ_USER_EMAIL UNIQUE,
+    auto_subscribe BOOLEAN DEFAULT false
     );
 
 CREATE TABLE IF NOT EXISTS categories
@@ -132,7 +134,6 @@ CREATE TABLE compilation_events
     PRIMARY KEY (compilation_id, event_id)
 );
 
-
 CREATE TABLE IF NOT EXISTS requests
 (
     id
@@ -158,8 +159,36 @@ CREATE TABLE IF NOT EXISTS requests
 )
   ON DELETE CASCADE,
     created TIMESTAMP
-  WITHOUT TIME ZONE NOT NULL
+  WITHOUT TIME ZONE NOT NULL,
+    private BOOLEAN NOT NULL DEFAULT true
     );
+
+CREATE TABLE IF NOT EXISTS friendship
+(
+    id
+    BIGINT
+    GENERATED
+    BY
+    DEFAULT AS
+    IDENTITY
+    PRIMARY
+    KEY,
+    follower_id
+    BIGINT,
+    friend_id
+    BIGINT,
+    state
+    VARCHAR
+    NOT
+    NULL,
+    created_on
+    TIMESTAMP
+    WITHOUT
+    TIME
+    ZONE
+    NOT
+    NULL
+);
 
 ALTER TABLE events
     ADD FOREIGN KEY (category_id) REFERENCES categories (id);
@@ -173,7 +202,10 @@ ALTER TABLE compilation_events
 ALTER TABLE compilation_events
     ADD FOREIGN KEY (event_id) REFERENCES events (id);
 
-ALTER TABLE requests
-    ADD FOREIGN KEY (event_id) REFERENCES events (id);
-ALTER TABLE requests
-    ADD FOREIGN KEY (requester_id) REFERENCES users (id);
+ALTER TABLE friendship
+    ADD FOREIGN KEY (follower_id) REFERENCES users (id);
+ALTER TABLE friendship
+    ADD FOREIGN KEY (friend_id) REFERENCES users (id);
+
+--ALTER TABLE requests ADD FOREIGN KEY (event_id) REFERENCES events (id);
+--ALTER TABLE requests ADD FOREIGN KEY (requester_id) REFERENCES users (id);

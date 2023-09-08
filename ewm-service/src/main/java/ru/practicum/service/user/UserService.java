@@ -11,7 +11,6 @@ public interface UserService {
      * Добавление нового пользователя
      *
      * @param body Данные добавляемого пользователя
-     * @return
      */
     UserDto registerUser(NewUserRequest body);
 
@@ -26,7 +25,6 @@ public interface UserService {
      * @param from количество элементов, которые нужно пропустить для формирования
      *             текущего набора default: 0
      * @param size количество элементов в наборе default: 10
-     * @return
      */
     List<UserDto> getUsers(List<Long> ids, Integer from, Integer size);
 
@@ -40,4 +38,6 @@ public interface UserService {
     void checkExistById(long userId);
 
     User findUserById(long userId);
+
+    UserDto changeSubscribeMode(long userId, boolean isAutoSubscribe);
 }

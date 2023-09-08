@@ -27,9 +27,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static java.lang.Boolean.FALSE;
-import static ru.practicum.enums.RequestStatus.*;
-
 @Service
 @RequiredArgsConstructor
 public class RequestServiceImpl implements RequestService {
@@ -41,11 +38,11 @@ public class RequestServiceImpl implements RequestService {
     private final EventService eventService;
 
     private static boolean isConfirmedRequest(Request r) {
-        return CONFIRMED.equals(r.getStatus());
+        return RequestStatus.CONFIRMED.equals(r.getStatus());
     }
 
     private static boolean isRejectedRequest(Request r) {
-        return REJECTED.equals(r.getStatus());
+        return RequestStatus.REJECTED.equals(r.getStatus());
     }
 
     /**
@@ -89,14 +86,14 @@ public class RequestServiceImpl implements RequestService {
                 .requester(user)
                 .event(event)
                 .status((event.getParticipantLimit() == 0) || (!event.getRequestModeration())
-                        ? CONFIRMED
-                        : PENDING
+                        ? RequestStatus.CONFIRMED
+                        : RequestStatus.PENDING
                 )
                 .created(LocalDateTime.now())
                 .build();
 
         final Request savedRequest = requestRepository.save(newRequest);
-        if (newRequest.getStatus().equals(CONFIRMED)) {
+        if (newRequest.getStatus().equals(RequestStatus.CONFIRMED)) {
             event.setConfirmedRequests(event.getConfirmedRequests() + 1);
             eventRepository.save(event);
         }
@@ -113,10 +110,32 @@ public class RequestServiceImpl implements RequestService {
                         String.format("Request with id=%d for userId=%d was not found.", requestId, userId),
                         Constants.THE_REQUIRED_OBJECT_WAS_NOT_FOUND));
 
-        request.setStatus(CANCELED);
+        request.setStatus(RequestStatus.CANCELED);
         requestRepository.save(request);
 
         return RequestMapper.toDto(request);
+    }
+
+    @Override
+    public List<ParticipationRequestDto> changeVisibilityEventParticipation(long userId, List<Long> ids, boolean hide) {
+        userService.checkExistById(userId);
+
+        final List<Request> requestList = requestRepository.findAllById(ids);
+        final boolean allMatchUser = requestList.stream()
+                .allMatch(request -> request.getRequester().getId().equals(userId));
+        if (!allMatchUser) {
+            throw new ConflictException("User cannot change the visibility of events in which he does not participate.");
+        }
+        final boolean allMatchStatus = requestList.stream()
+                .allMatch(request -> request.getStatus().equals(RequestStatus.CONFIRMED));
+        if (!allMatchStatus) {
+            throw new ConflictException("Participation in events must be confirmed.");
+        }
+        requestList.forEach(f -> f.setPrivate(hide));
+        requestRepository.saveAll(requestList);
+        return requestList.stream()
+                .map(RequestMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -172,7 +191,7 @@ public class RequestServiceImpl implements RequestService {
                     "Conflict confirmed exception");
         }
         //находим заявки в режиме ожидания по списку id
-        final List<Request> requestList = requestRepository.findAllByIdInAndStatus(requestIds, PENDING);
+        final List<Request> requestList = requestRepository.findAllByIdInAndStatus(requestIds, RequestStatus.PENDING);
         if (requestList.size() != requestIds.size()) {
             // статус можно изменить только у заявок, находящихся в состоянии ожидания (Ожидается код ошибки 409)
             throw new ConflictException("Status change is only possible for requests with state='PENDING'");
@@ -184,18 +203,18 @@ public class RequestServiceImpl implements RequestService {
 
         checkStatus(newStatus);
 
-        if (REJECTED.equals(newStatus)) {
-            requestList.forEach(r -> r.setStatus(REJECTED));
+        if (RequestStatus.REJECTED.equals(newStatus)) {
+            requestList.forEach(r -> r.setStatus(RequestStatus.REJECTED));
             rejectedList.addAll(requestList.stream()
                     .map(RequestMapper::toDto)
                     .collect(Collectors.toList()));
         }
 
-        if (CONFIRMED.equals(newStatus)) {
+        if (RequestStatus.CONFIRMED.equals(newStatus)) {
             // если для события лимит заявок равен 0 или отключена пре-модерация заявок,
             // то подтверждение заявок не требуется
-            if ((participantLimit == 0) || FALSE.equals(isRequestModeration)) {
-                requestList.forEach(r -> r.setStatus(CONFIRMED));
+            if ((participantLimit == 0) || Boolean.FALSE.equals(isRequestModeration)) {
+                requestList.forEach(r -> r.setStatus(RequestStatus.CONFIRMED));
                 final List<ParticipationRequestDto> confirmedList = requestList.stream()
                         .map(RequestMapper::toDto)
                         .collect(Collectors.toList());
@@ -207,10 +226,10 @@ public class RequestServiceImpl implements RequestService {
 
             for (Request r : requestList) {
                 if (currentConfirmed < participantLimit) {
-                    r.setStatus(CONFIRMED);
+                    r.setStatus(RequestStatus.CONFIRMED);
                     currentConfirmed++;
                 } else {
-                    r.setStatus(REJECTED);
+                    r.setStatus(RequestStatus.REJECTED);
                 }
             }
 
@@ -231,11 +250,10 @@ public class RequestServiceImpl implements RequestService {
     }
 
     private void checkStatus(RequestStatus newStatus) {
-        final Set<RequestStatus> availableStats = Set.of(CONFIRMED, REJECTED);
+        final Set<RequestStatus> availableStats = Set.of(RequestStatus.CONFIRMED, RequestStatus.REJECTED);
         if (!availableStats.contains(newStatus)) {
             throw new ConflictException(String.format("Wrong status. Status should be one of: %s",
                     availableStats.stream().sorted().collect(Collectors.toList())));
         }
     }
-
 }

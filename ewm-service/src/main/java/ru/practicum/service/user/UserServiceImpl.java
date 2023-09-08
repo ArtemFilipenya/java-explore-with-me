@@ -18,9 +18,6 @@ import ru.practicum.utils.Constants;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static ru.practicum.utils.Constants.THE_REQUIRED_OBJECT_WAS_NOT_FOUND;
-import static ru.practicum.utils.Constants.USER_WITH_ID_D_WAS_NOT_FOUND;
-
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -58,7 +55,7 @@ public class UserServiceImpl implements UserService {
         if (!userRepository.existsById(userId)) {
             throw new NotFoundException(
                     String.format(Constants.USER_WITH_ID_D_WAS_NOT_FOUND, userId),
-                    THE_REQUIRED_OBJECT_WAS_NOT_FOUND);
+                    Constants.THE_REQUIRED_OBJECT_WAS_NOT_FOUND);
         }
         if (eventRepository.existsByInitiatorId(userId) || requestRepository.existsByRequesterId(userId)) {
             throw new ConflictException(
@@ -72,8 +69,8 @@ public class UserServiceImpl implements UserService {
     public void checkExistById(long userId) {
         if (!userRepository.existsById(userId)) {
             throw new NotFoundException(
-                    String.format(USER_WITH_ID_D_WAS_NOT_FOUND, userId),
-                    THE_REQUIRED_OBJECT_WAS_NOT_FOUND);
+                    String.format(Constants.USER_WITH_ID_D_WAS_NOT_FOUND, userId),
+                    Constants.THE_REQUIRED_OBJECT_WAS_NOT_FOUND);
         }
     }
 
@@ -81,8 +78,16 @@ public class UserServiceImpl implements UserService {
     public User findUserById(long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(
-                        String.format(USER_WITH_ID_D_WAS_NOT_FOUND, userId),
-                        THE_REQUIRED_OBJECT_WAS_NOT_FOUND));
+                        String.format(Constants.USER_WITH_ID_D_WAS_NOT_FOUND, userId),
+                        Constants.THE_REQUIRED_OBJECT_WAS_NOT_FOUND));
 
+    }
+
+    @Override
+    public UserDto changeSubscribeMode(long userId, boolean isAutoSubscribe) {
+        final User user = findUserById(userId);
+        user.setAutoSubscribe(isAutoSubscribe);
+        userRepository.save(user);
+        return UserMapper.toDto(user);
     }
 }
